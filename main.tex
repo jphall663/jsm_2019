@@ -12,6 +12,7 @@
 \usepackage[american]{babel}
 \usepackage{graphicx}
 \usepackage{hyperref}
+
 \hypersetup{
     colorlinks=true,
     urlcolor=[rgb]{1,0,1},
@@ -25,7 +26,7 @@
 \setbeamerfont{caption}{size=\footnotesize}
 \setbeamertemplate{frametitle continuation}{}
 
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{2}
 \renewcommand*{\bibfont}{\scriptsize}
 \addbibresource{bibliography.bib}
 
@@ -64,10 +65,10 @@
 		\frametitle{What is Model Debugging?}
 		
 		\begin{itemize}
-			\item Model debugging is an emergent discipline focused on discovering and remediating errors in the internal mechanisms and outputs of machine learning models. 
+			\item Model debugging is an emergent discipline focused on discovering and remediating errors in the internal mechanisms and outputs of machine learning models.\footnote{See \url{https://debug-ml-iclr2019.github.io/} for numerous model debugging approaches.} 
 			\item Model debugging attempts to test machine learning models like code (because the models are code).
 			\item Model debugging promotes trust directly and enhances interpretability as a side-effect.
-		\end{itemize}	
+		\end{itemize}
 		
 	\end{frame}
 
@@ -75,75 +76,241 @@
 	\section{Why?}
 %-------------------------------------------------------------------------------
 
-	\begin{frame}
+%-------------------------------------------------------------------------------
+		\subsection{Inaccuracy}
+%-------------------------------------------------------------------------------
+
+			\begin{frame}
 		
-		\frametitle{Why Bother With Model Debugging?}
+				\frametitle{Why Bother With Model Debugging?}
 		
-			\footnotesize{Machine learning models can be \textbf{inaccurate}.}
-			\begin{columns}
+					\footnotesize{Machine learning models can be \textbf{inaccurate}.}
+					\begin{columns}
 				
-				\column{0.5\linewidth}
-				\centering
-				\includegraphics[height=125pt]{img/global_shap.png}\\
-				\vspace{5pt}
-				\tiny{This probability of default classifier, $g_{\text{mono}}$, over-emphasizes the most important feature, a customer's most recent repayment status, $\text{PAY\_0}$.}
+						\column{0.5\linewidth}
+						\centering
+						\includegraphics[height=125pt]{img/global_shap.png}\\
+						\vspace{5pt}
+						\tiny{This probability of default classifier, $g_{\text{mono}}$, over-emphasizes the most important feature, a customer's most recent repayment status, $\text{PAY\_0}$.}
 				
-				\column{0.5\linewidth}
-				\centering
-				\vspace{9pt}
-				\includegraphics[height=120pt]{img/resid.png}\\
-				\vspace{8pt}
-				\tiny{$g_{\text{mono}}$ also struggles to predict default for favorable statuses, $-2  \leq \texttt{PAY\_0}  < 2$, and often cannot predict on-time payment when recent payments are late, $\text{PAY\_0} \geq 2$}.
+						\column{0.5\linewidth}
+						\centering
+						\vspace{9pt}
+						\includegraphics[height=120pt]{img/resid.png}\\
+						\vspace{8pt}
+						\tiny{$g_{\text{mono}}$ also struggles to predict default for favorable statuses, $-2  \leq \texttt{PAY\_0}  < 2$, and often cannot predict on-time payment when recent payments are late, $\text{PAY\_0} \geq 2$}.
 				
-			\end{columns}
-			\normalsize
+					\end{columns}
+					\normalsize
 			
-	\end{frame}
+			\end{frame}
 	
-	\begin{frame}
-		
-		\frametitle{Why Bother With Model Debugging?}
-		
-		\footnotesize{Machine learning models can exhibit \textbf{disparate impact} or other types of\\sociological bias.}
-		\vspace{10pt}	
-		\begin{table}[htb!]
-			\centering
-			\footnotesize
-			\begin{tabular}{ | p{1.2cm} | p{1.1cm} | p{1.3cm} | p{1.2cm}| p{1.2cm} | p{1.2cm} | p{1.2cm} | p{1.2cm} | }
-				\hline
-				& Adverse\newline Impact\newline Ratio & Accuracy Disparity & TPR\newline Disparity & TNR\newline Disparity & FPR\newline Disparity & FNR\newline Disparity \\ 
-				\hline
-				\texttt{single} & 0.89 & 1.03 & 0.99 & 1.03 & 0.85 & 1.01 \\
-				\hline	
-				\texttt{divorced} & 1.01 & 0.93 & 0.81 & 0.96 & \textcolor{magenta}{1.25} & 1.22 \\
-				\hline
-				\texttt{other} & \textcolor{magenta}{0.26} & 1.12 & \textcolor{magenta}{0.62} & 1.17 & \textcolor{magenta}{0} & \textcolor{magenta}{1.44} \\
-				\hline	
-			\end{tabular}
-		\end{table}
-		\footnotesize{Group disparity metrics are out-of-range for $g_{\text{mono}}$ across different marital statuses.}
-		\normalsize
-		
-	\end{frame}
+%-------------------------------------------------------------------------------
+		\subsection{Sociological Biases}
+%-------------------------------------------------------------------------------	
 	
-	\begin{frame}
+			\begin{frame}
 		
-		\frametitle{Why Bother With Model Debugging?}
+				\frametitle{Why Bother With Model Debugging?}
 		
-		\footnotesize{Machine learning models can have \textbf{security vulnerabilities}}.
-		\begin{figure}[htb]
-			\begin{center}
-				\includegraphics[height=170pt]{img/cheatsheet.png}
-			\end{center}
-		\end{figure}	
-		\vspace{-17pt}
-		\footnotesize{Hackers can manipulate models and steal models and data!}
-		\normalsize
+				\footnotesize{Machine learning models can perpetuate \textbf{sociological biases} \cite{barocas-hardt-narayanan}.}
+				\vspace{10pt}	
+				\begin{table}[htb!]
+					\centering
+					\footnotesize
+					\begin{tabular}{ | p{1.2cm} | p{1.1cm} | p{1.3cm} | p{1.2cm}| p{1.2cm} | p{1.2cm} | p{1.2cm} | p{1.2cm} | }
+						\hline
+						& Adverse\newline Impact\newline Ratio & Accuracy Disparity & TPR\newline Disparity & TNR\newline Disparity & FPR\newline Disparity & FNR\newline Disparity \\ 
+						\hline
+						\texttt{single} & 0.89 & 1.03 & 0.99 & 1.03 & 0.85 & 1.01 \\
+						\hline	
+						\texttt{divorced} & 1.01 & 0.93 & 0.81 & 0.96 & \textcolor{magenta}{1.25} & 1.22 \\
+						\hline
+						\texttt{other} & \textcolor{magenta}{0.26} & 1.12 & \textcolor{magenta}{0.62} & 1.17 & \textcolor{magenta}{0} & \textcolor{magenta}{1.44} \\
+						\hline	
+					\end{tabular}
+				\end{table}
+				\footnotesize{Group disparity metrics are out-of-range for $g_{\text{mono}}$ across different marital statuses.}
+				\normalsize
 		
-	\end{frame}
+			\end{frame}
+	
+%-------------------------------------------------------------------------------
+		\subsection{Security Vulnerabilities}
+%-------------------------------------------------------------------------------	
+	
+			\begin{frame}
+		
+				\frametitle{Why Bother With Model Debugging?}
+		
+				\footnotesize{Machine learning models can have \textbf{security vulnerabilities} \cite{security_of_ml}, \cite{membership_inference}, \cite{model_stealing}}.
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=155pt]{img/cheatsheet.png}
+					\end{center}
+				\end{figure}	
+				\vspace{-17pt}
+				\footnotesize{Hackers, competitors, or malicious or extorted insiders can manipulate model outcomes, steal models, and steal data!}
+				\normalsize
+		
+			\end{frame}
 
 %-------------------------------------------------------------------------------
-%	References
+	\section{How?}
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+		\subsection{Holistic, Low-Risk Approach}
+%-------------------------------------------------------------------------------	
+	
+			\begin{frame}
+		
+				\frametitle{How to Debug Models?}
+		
+				\footnotesize{As part of a holistic, low-risk approach to machine learning}.\footnote{See \url{https://github.com/jphall663/hc_ml} for more information.}
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=170pt]{img/blueprint.png}
+					\end{center}
+				\end{figure}	
+				\normalsize
+		
+			\end{frame}
+
+%-------------------------------------------------------------------------------
+		\subsection{Sensitivity Analysis}
+%-------------------------------------------------------------------------------	
+
+			\begin{frame}[allowframebreaks]
+		
+				\frametitle{\textbf{Sensitivity Analysis}: Search for Adversarial Examples}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=170pt]{img/sa_max_prob.png}
+					\end{center}
+				\end{figure}	
+				
+				\framebreak
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=170pt]{img/sa_max_prob_demo.png}
+					\end{center}
+				\end{figure}		
+		
+			\end{frame}
+			
+			\begin{frame}
+		
+				\frametitle{\textbf{Sensitivity Analysis}: Partial Dependence and Individual Conditional Expectation (ICE)}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=83pt]{img/pd.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}			
+			
+			\begin{frame}
+		
+				\frametitle{\textbf{Sensitivity Analysis}: Random Attacks}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=180pt]{img/ra.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+			
+%-------------------------------------------------------------------------------
+		\subsection{Residual Analysis}
+%-------------------------------------------------------------------------------	
+
+			\begin{frame}
+		
+				\frametitle{\textbf{Residual Analysis}: Disparate Errors}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=150pt]{img/de.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+
+			\begin{frame}
+		
+				\frametitle{\textbf{Residual Analysis}: Mean Local Feature Contributions}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=122pt]{img/global_high_low.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+
+			\begin{frame}
+		
+				\frametitle{\textbf{Residual Analysis}: Global Importance for Predictions and Logloss}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=150pt]{img/global_pred_loss.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+
+			\begin{frame}
+		
+				\frametitle{\textbf{Residual Analysis}: Local Feature Contributions to Logloss}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=150pt]{img/local.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+
+			\begin{frame}
+		
+				\frametitle{\textbf{Residual Analysis}: Surrogate Decision Trees}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=90pt]{img/surrogate_dt_1.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+			
+%-------------------------------------------------------------------------------
+		\subsection{Benchmark Models}
+%-------------------------------------------------------------------------------	
+
+			\begin{frame}
+		
+				\frametitle{\textbf{Benchmark Models}}
+		
+				\begin{figure}[htb]
+					\begin{center}
+						\includegraphics[height=150pt]{img/benchmark.png}
+					\end{center}
+				\end{figure}	
+		
+			\end{frame}
+
+%-------------------------------------------------------------------------------
+		\subsection{Remediation}
+%-------------------------------------------------------------------------------	
+
+%-------------------------------------------------------------------------------
+%	\section{References}
 %-------------------------------------------------------------------------------
 
 	\begin{frame}[t, allowframebreaks]
