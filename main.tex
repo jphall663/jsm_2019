@@ -193,7 +193,7 @@
 			
 			\begin{frame}
 		
-				\frametitle{\textbf{Sensitivity Analysis}: Partial Dependence and Individual Conditional Expectation (ICE)}
+				\frametitle{\textbf{Sensitivity Analysis}: Partial Dependence and ICE}
 		
 				\begin{figure}[htb]
 					\begin{center}
@@ -237,7 +237,7 @@
 		
 				\begin{figure}[htb]
 					\begin{center}
-						\includegraphics[height=122pt]{img/global_high_low.png}
+						\includegraphics[height=125pt]{img/global_high_low.png}
 					\end{center}
 				\end{figure}	
 		
@@ -245,7 +245,7 @@
 
 			\begin{frame}
 		
-				\frametitle{\textbf{Residual Analysis}: Global Importance for Predictions and Logloss}
+				\frametitle{\large{\textbf{Residual Analysis}: Importance for Predictions and Logloss}}
 		
 				\begin{figure}[htb]
 					\begin{center}
@@ -257,11 +257,13 @@
 
 			\begin{frame}
 		
-				\frametitle{\textbf{Residual Analysis}: Local Feature Contributions to Logloss}
+				\frametitle{\textbf{Residual Analysis}: Local Contributions to Logloss}
+		
+				%Exactly why this prediction is wrong!
 		
 				\begin{figure}[htb]
 					\begin{center}
-						\includegraphics[height=150pt]{img/local.png}
+						\includegraphics[height=130pt]{img/local.png}
 					\end{center}
 				\end{figure}	
 		
@@ -269,7 +271,7 @@
 
 			\begin{frame}
 		
-				\frametitle{\textbf{Residual Analysis}: Surrogate Decision Trees}
+				\frametitle{\textbf{Residual Analysis}: Modeling Residuals}
 				\begin{figure}[htb]
 					\begin{center}
 						\includegraphics[height=95pt, width=330pt]{img/surrogate_dt_1.png}
@@ -289,18 +291,36 @@
 				\frametitle{\textbf{Benchmark Models}: Compare to Linear Models}
 				\begin{figure}[htb]
 					\begin{center}
-						\includegraphics[height=150pt]{img/benchmark.png}
+						\includegraphics[height=130pt]{img/benchmark.png}
 					\end{center}
 				\end{figure}	
 				
 			\end{frame}
 
+
+% techniques not mentioned:
+
+% summary/conclusion of things about this model
+% - overemphasis of PAY_0: remediated by std. dev. of pay amnts 
+% - cannot handle case where PAY_AMNT1 > LIMIT_BAL
+% - adversarial attacks possible/random attack/missing attack can decrease prob of default 
+% - lack fo data for late payments 
+% - potential fairness issues for marital status, gender tentatively looks ok 
+% - linear model may perform better for predictions between 0.2 - 0.6 
+% - laughable false positive rates for pay_0 > 2
+% - NONE of this visible in PR-AUC, error metrics,  and confusion matirix 
+
 %-------------------------------------------------------------------------------
 		\subsection{Error Remediation}
 %-------------------------------------------------------------------------------	
 
-% techniques not mentioned:
-%- calibration
+% general:
+
+%-- calibration
+% - data collection or simulation for model blindspots 
+
+% which code for which slide
+
 
 %-------------------------------------------------------------------------------
 %	\section{References}
