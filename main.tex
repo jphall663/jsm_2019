@@ -1,7 +1,7 @@
 \documentclass[11pt,
 			   %10pt, 
                %hyperref={colorlinks},
-               aspectratio=43,
+               aspectratio=169,
                hyperref={colorlinks}
                ]{beamer}
 \usetheme{Singapore}
@@ -39,7 +39,7 @@
 
 \author{\copyright\hspace{1pt}Patrick Hall\footnote{\tiny{This material is shared under a \href{https://creativecommons.org/licenses/by/4.0/deed.ast}{CC By 4.0 license} which allows for editing and redistribution, even for commercial purposes. However, any derivative work should attribute the author and H2O.ai.}}}
 \title{Increasing Trust and Understanding in Machine Learning with Model Debugging }
-\logo{\includegraphics[height=8pt]{img/h2o_logo.png}}
+\logo{\includegraphics[height=22pt]{img/h2o_world_logo.png}}
 \institute{\href{https://www.h2o.ai}{H\textsubscript{2}O.ai}}
 \date{\today}
 \subject{}
@@ -72,6 +72,20 @@
 		\end{itemize}
 		
 	\end{frame}
+	
+		\begin{frame}[t]
+
+  			\frametitle{Trust and Understanding}
+          
+  			\begin{figure}[htb]
+    				\begin{center}
+      					\includegraphics[height=130pt]{img/trust_understanding.png}
+    				\end{center}
+  			\end{figure}
+  
+  			Trust and understanding in machine learning are different but complementary goals, and they are technically feasible \textit{today}.
+    
+		\end{frame}
 
 %-------------------------------------------------------------------------------
 	\section{Why?}
@@ -142,12 +156,12 @@
 						\vspace{5pt}
 						\tiny{$g_{\text{mono}}$ PD classifier over-emphasizes the most important feature, a customer's most recent repayment status, $\text{PAY\_0}$.}
 
-						\vspace{10pt}
-						\column{0.6\linewidth}
+						\vspace{11pt}
+						\column{0.5\linewidth}
 						\centering
 						\includegraphics[height=118pt]{img/resid.png}\\
-						\vspace{5pt}
-						\tiny{$g_{\text{mono}}$ also struggles to predict default for favorable statuses, $-2  \leq \texttt{PAY\_0}  < 2$, and often cannot predict on-time payment when recent payments are late, $\text{PAY\_0} \geq 2$}.
+						\vspace{7pt}
+						\tiny{$g_{\text{mono}}$ also struggles to predict default for favorable statuses, $-2  \leq \texttt{PAY\_0}  < 2$, and often cannot predict on-time payment\\when recent payments are late, $\text{PAY\_0} \geq 2$}.
 				
 					\end{columns}
 					\normalsize
@@ -169,7 +183,7 @@
 						\includegraphics[height=100pt]{img/di.png}
 					\end{center}
 				\end{figure}
-				\scriptsize{Group disparity metrics are out-of-range for $g_{\text{mono}}$ across different marital statuses.}
+				\center{\scriptsize{Group disparity metrics are out-of-range for $g_{\text{mono}}$ across different marital statuses.\\This \textit{does not} address localized instances of discrimination.}}
 				\normalsize
 		
 			\end{frame}
@@ -178,14 +192,14 @@
 		\subsection{Security Vulnerabilities}
 %-------------------------------------------------------------------------------	
 % Hackers, competitors, or malicious or extorted insiders can manipulate model outcomes, steal models, and steal data!
-			\begin{frame}
+			\begin{frame}[t]
 		
 				\frametitle{Why Debug?}
 		
 				\footnotesize{Machine learning models can have \textbf{security vulnerabilities} \cite{security_of_ml}, \cite{membership_inference}, \cite{model_stealing}}.\footnote{\tiny{See \url{https://github.com/jphall663/secure_ML_ideas} for full size image and more information.}}
-				\begin{figure}
+				\begin{figure}[]
 					\begin{center}
-						\includegraphics[height=160pt]{img/cheatsheet.png}
+						\includegraphics[height=135pt]{img/cheatsheet.png}
 					\end{center}
 				\end{figure}	
 				\vspace{-17pt}
@@ -244,7 +258,7 @@
 				\frametitle{\textbf{Sensitivity Analysis}: Search for Adversarial Examples}
 				\begin{figure}
 					\begin{center}
-						\includegraphics[height=150pt]{img/sa_max_prob.png}
+						\includegraphics[height=135pt]{img/sa_max_prob.png}
 					\end{center}
 				\end{figure}
 				\tiny{Adversary search confirms multiple avenues of attack and exposes a potential flaw in $g_{\text{mono}}$ scoring logic: default is predicted for customer's who make payments above their credit limit. (Try the \href{https://github.com/tensorflow/cleverhans}{cleverhans} package for finding adversarial examples.)}
@@ -253,7 +267,7 @@
 				\vspace{-5pt}
 				\begin{figure}
 					\begin{center}
-						\includegraphics[height=150pt]{img/sa_max_prob_demo.png}
+						\includegraphics[height=135pt]{img/sa_max_prob_demo.png}
 					\end{center}
 				\end{figure}
 				\vspace{-5pt}
